@@ -5,7 +5,6 @@ import sys
 import io
 from pathlib import Path
 
-# FORCES UTF-8 TO HANDLE ASCII ART AND SPECIAL CHARS
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # ----------------------------
@@ -25,27 +24,58 @@ CREATE TABLE IF NOT EXISTS inventory (
 conn.commit()
 
 # ----------------------------
-# RETRO SCREEN HELPERS
+# SCREEN HELPERS
 # ----------------------------
+
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
+def cyan(text):
+    return f"\033[96m{text}\033[0m"
+
 def green(text):
-    return f"\033[92m{text}\033[0m"
+    return f"\033[32m{text}\033[0m"
+
+def red(text):
+    return f"\033[31m{text}\033[0m"
+
+def yellow(text):
+    return f"\033[33m{text}\033[0m"
+
+def magenta(text):
+    return f"\033[35m{text}\033[0m"
+
+def blue(text):
+    return f"\033[34m{text}\033[0m"
+
+def bright_red(text):
+    return f"\033[91m{text}\033[0m"
+
+def bright_magenta(text):
+    return f"\033[95m{text}\033[0m"
+
+def bright_yellow(text):
+    return f"\033[93m{text}\033[0m"
+
+def bright_blue(text):
+    return f"\033[94m{text}\033[0m"
+
+
 
 def draw_header():
-    # The 'r' before the triple quotes is the secret sauce for ASCII art
+
     logo = r"""
-  _________ __               .____    .__       .__     __   
- /   _____//  |______ _______|    |   |__| ____ |  |___/  |_ 
- \_____  \\   __\__  \\_  __ \    |   |  |/ ___\|  |  \   __\
- /        \|  |  / __ \|  | \/    |___|  / /_/  >   Y  \  |  
-/_______  /|__| (____  /__|  |_______ \__\___  /|___|  /__|  TM
-        \/           \/              \/ /_____/      \/      
+       _______             _      _       _     _          
+    * / ____  |   +       | |    (_)     | |   | | TM .    
++    | (___ | |_ __ _ _ __| |  .  _  __ _| |__ | |_     +  
+  *   \___ \| __/ _` | '__  |    | |/ _` | '_ \| __| *     
+ _________) | |_|(_| | |  | |____| | (_| | | | | |________ 
+(___________/\_/\__,_|_| +|______|_|\__, |_| |_|\_________)
+                 .              +   __/ /    *      .      
+                                   |___/                   
     """
-    print(green(logo))
-    print(green("             INVENTORY & POINT-OF-SALE SYSTEM v0.9"))
-    print(green("             -------------------------------------"))
+    print(cyan(logo))
+    print(bright_blue("                   v2.0 | © 2026 BAES Inc."))
 
 # ----------------------------
 # INVENTORY FUNCTIONS
@@ -82,7 +112,7 @@ def edit_stock():
         new_qty = selected_item[4] + adj
         cursor.execute("UPDATE inventory SET quantity=? WHERE item_number=?", (new_qty, selected_item[1]))
         conn.commit()
-        print(green(f"SUCCESS. NEW TOTAL: {new_qty}"))
+        print(cyan(f"SUCCESS. NEW TOTAL: {new_qty}"))
     except ValueError:
         print("Error: Whole numbers only.")
     input("\nPress ENTER...")
